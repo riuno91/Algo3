@@ -1,4 +1,6 @@
-package teine.kodutöö.algoritmid.implementations;
+package ee.algo3.implementations;
+
+import ee.algo3.Nodes.Node;
 
 /**
  * (stack - LIFO) tuleb realiseerida dünaamilise massiivi abil.
@@ -17,7 +19,7 @@ public class MagazineArray extends DynamicArray {
     /**
      *Lisab täisarvu x magasini (listi algusesse) O(1)
      */
-    public void push(int x){
+    public void push(Node x){
 
         super.add(x);
 
@@ -26,8 +28,8 @@ public class MagazineArray extends DynamicArray {
     /**
      * Eemaldab ja väljastab magasini viimasena sisestatud elemendi O(1)
      */
-    public int pop (){
-        int n = 0;
+    public Node pop (){
+        Node n = new Node();
 
         n = super.rem();
 

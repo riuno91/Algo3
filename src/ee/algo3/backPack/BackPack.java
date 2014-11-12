@@ -1,15 +1,22 @@
 package ee.algo3.backPack;
 
+import ee.algo3.Nodes.Node;
+import ee.algo3.implementations.MagazineArray;
 import ee.algo3.items.Item;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Riuno on 11.11.2014.
  */
 public class BackPack {
-    private double weight;
+    private int weight;
+    private int profit;
+    private int maxWeight;
     private ArrayList<Item> items;
+    private Node optimalNode;
 
     public BackPack() {
         items = new ArrayList<Item>();
@@ -19,7 +26,96 @@ public class BackPack {
         return weight;
     }
 
-    public void setWeight(double weight) {
+    public void setWeight(int weight) {
         this.weight = weight;
     }
+
+
+    public double getProfit() {
+        return profit;
+    }
+
+    public void setProfit(int   profit) {
+        this.profit = profit;
+    }
+
+    public int getMaxWeight() {
+        return maxWeight;
+    }
+
+    public void setMaxWeight(int maxWeight) {
+        this.maxWeight = maxWeight;
+    }
+
+    public ArrayList<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(ArrayList<Item> items) {
+        this.items = items;
+    }
+
+
+
+    public Node knapSackDepthFirst(ArrayList<Item> items, int maxWeight) {
+        this.maxWeight = maxWeight;
+        this.items = items;
+        calculate(new MagazineArray());
+        return optimalNode;
+    }
+
+    public double knapSackDepthFirst(int[] itemWeights, int[] itemValues, int maxWeight) {
+
+        this.maxWeight = maxWeight;
+        items = new ArrayList<Item>(itemValues.length);
+        for (int i = 0; i < itemValues.length; i++) {
+            items.add(new Item(itemWeights[i], itemValues[i]));
+        }
+        calculate(new MagazineArray());
+
+        return optimalNode.getProfit();
+    }
+
+    private void calculate(MagazineArray() data) {
+        Collections.sort(items);
+
+        Node rootNode = new Node(this); // the top of the decision tree (at first)
+        rootNode.calculateBound();
+        data.put(rootNode);
+
+        Node childNode;
+        optimalNode = new Node(this);
+
+        while (!data.isEmpty()) {
+            rootNode = data.get();
+
+            if (rootNode.getBound() > optimalNode.getValue()) {
+                // set childNode to the child that *does* include the next item
+                childNode = new Node(this, rootNode, true);
+
+                // if childNode's value is bigger than current largest value
+                if (childNode.getWeight() <= maxWeight && childNode.getValue() > optimalNode.getValue()) {
+                    optimalNode = childNode;
+                }
+
+                childNode.calculateBound();
+                if (childNode.getBound() > optimalNode.getValue()) {
+                    //System.out.println("Putting to queue because " + childNode.getBound() + ">" + optimalNode.getValue());
+
+                    data.put(childNode);
+                }
+
+                // set childNode to the child that *does not* include the next item
+                childNode = new Node(this, rootNode, false);
+
+                childNode.calculateBound();
+                if (childNode.getBound() > optimalNode.getValue()) {
+                    //System.out.println("Putting to queue because " + childNode.getBound() + ">" + optimalNode.getValue());
+                    data.put(childNode);
+                }
+
+            }
+        }
+    }
+
 }

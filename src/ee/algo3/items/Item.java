@@ -8,8 +8,9 @@ public class Item {
     private double weight;
     private double price;
 
-    public Item() {
-
+    public Item(int itemWeight, int itemValue) {
+        this.setPrice(itemValue);
+        this.setWeight(itemWeight);
     }
 
     public double getWeight() {

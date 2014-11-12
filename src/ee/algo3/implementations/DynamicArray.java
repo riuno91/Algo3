@@ -1,5 +1,9 @@
-package teine.kodutöö.algoritmid.implementations;
+package ee.algo3.implementations;
 
+import ee.algo3.Nodes.Node;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -10,7 +14,7 @@ import java.util.Arrays;
  *
  */
 public class DynamicArray {
-    private int[] array;
+    private ArrayList<Node> array;
     public int size;
 
     /**
@@ -18,22 +22,22 @@ public class DynamicArray {
      * create()
      */
      public DynamicArray(){
-        array = new int[0];
+        array = new ArrayList<Node>();
         size = -1;
     }
     /**
      * lisame elemendi dünaamilisse massiivi,
      * kui oletatav massiivi pikkus on suurem, kui massiivi tegelik pikkus,
      * siis kasvatame massiivi.
-     * @param x
+     * @param node
      */
-    public void add(int x){
+    public void add(Node node){
 
         size++;
-        if (size >= array.length) {
+     /*   if (size >= array.size()) {
             increaseListSize();
-        }
-        array[size]= x;
+        }*/
+        array.set(size,node);
     }
 
     /**
@@ -41,20 +45,20 @@ public class DynamicArray {
      * alatäitumisel vähendame massiivi.
      * @return
      */
-    public int rem(){
-
+    public Node rem(){
+        Node lastElement = new Node();
         if (size > -1) {
-            int lastElement = array[size];
-            array[size] = 0;
-
-            if (array.length / (size + 1) < 0.25) {
+             lastElement = array.get(size);
+            array.set(size,null);
+/*
+            if (array.size() / (size + 1) < 0.25) {
                 decreaseListSize();
             }
-
+*/
             size--;
             return lastElement;
         } else {
-            return 0;
+            return null;
         }
 
     }
@@ -64,11 +68,11 @@ public class DynamicArray {
      * @param n
      * @return
      */
-    public int get(int n){
+    public Node get(int n){
         if(n <= size){
-            return array[n];
+            return array.get(n);
         }
-        else return 0;
+        else return null;
     }
 
     /**
@@ -77,9 +81,9 @@ public class DynamicArray {
      * @param x
      * @param i
      */
-    public void put(int x, int i){
-        if(i<=size){
-            array[i]=x;
+    public void put(Node x, int i){
+        if(i <= size) {
+            array.set(i,x);
         }
     }
 
@@ -96,23 +100,25 @@ public class DynamicArray {
      * teeme array kaks kord suuremaks,
      * et saaks sisestada uusi täisarve array'isse
      */
-    private void increaseListSize(){
+  /*  private void increaseListSize(){
 
-        if (array.length == 0){
+        if (array.size() == 0){
+            array = ArrayList<Node>.
             array = Arrays.copyOf(array, 1);
         }else{
             array = Arrays.copyOf(array, array.length * 2);
         }
 
     }
-
+*/
     /**
      * teeme array kokkuhoiu nimel kaks korda väiksemaks,
      * juhul kui eemaldame sellest elemente
      *
      */
+    /*
     private void decreaseListSize(){
         array = Arrays.copyOf(array, array.length / 2);
     }
-
+*/
 }

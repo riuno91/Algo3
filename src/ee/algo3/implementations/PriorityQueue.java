@@ -1,4 +1,4 @@
-package teine.kodutöö.algoritmid.implementations;
+package ee.algo3.implementations;
 
 
 /**
