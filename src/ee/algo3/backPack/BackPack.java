@@ -1,83 +1,61 @@
 package ee.algo3.backPack;
 
+
 import ee.algo3.Nodes.Node;
 import ee.algo3.implementations.MagazineArray;
 import ee.algo3.items.Item;
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by Riuno on 11.11.2014.
- */
+
 public class BackPack {
-    private int weight;
-    private int profit;
     private int maxWeight;
-    private ArrayList<Item> items;
+    private List<Item> items;
     private Node optimalNode;
-
-    public BackPack() {
-        items = new ArrayList<Item>();
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-
-
-    public double getProfit() {
-        return profit;
-    }
-
-    public void setProfit(int   profit) {
-        this.profit = profit;
-    }
 
     public int getMaxWeight() {
         return maxWeight;
     }
 
-    public void setMaxWeight(int maxWeight) {
-        this.maxWeight = maxWeight;
-    }
-
-    public ArrayList<Item> getItems() {
+    public List<Item> getItems() {
         return items;
     }
 
-    public void setItems(ArrayList<Item> items) {
-        this.items = items;
+    public int getItemCount() {
+        return items.size();
     }
 
 
-
-    public Node backPackDepthFirst(ArrayList<Item> items, int maxWeight) {
-        this.maxWeight = maxWeight;
-        this.items = items;
+    public Node BackPackDepthFirst(List<Item> items, int maxWeight) {
+        this.maxWeight = maxWeight;			// maksimaalne kaal inputist
+        this.items = items;					// input itemid, koik, list
         calculate(new MagazineArray());
         return optimalNode;
     }
 
-    public double backPackDepthFirst(int[] itemWeights, int[] itemValues, int maxWeight) {
 
-        this.maxWeight = maxWeight;
-        items = new ArrayList<Item>(itemValues.length);
-        for (int i = 0; i < itemValues.length; i++) {
-            items.add(new Item(itemWeights[i], itemValues[i]));
-        }
-        calculate(new MagazineArray());
-
-        return optimalNode.getProfit();
+    public Item[] getSetOfBestItems() {
+        return optimalNode.getBranch().toArray(new Item[optimalNode.getBranch().size()]);
     }
 
+    public List<Item> getListSetOfBestItems() {
+        return optimalNode.getBranch();
+    }
+
+
+    // mida sa siia sisse votad ma ei saa aru, mis sul viga on?
+
     private void calculate(MagazineArray data) {
+        //peame itemid ara sortima, et algo saaks oigesti teha
+        // korgema kaaluga tulevad esimesena
+
         Collections.sort(items);
+
+
+        // kas see on siis ylemine node???
+        //weigth on 0,
+        //price on ka 0
+        //teeme boundi ka sellele libule
 
         Node rootNode = new Node(this); // the top of the decision tree (at first)
         rootNode.calculateBound();
@@ -89,17 +67,17 @@ public class BackPack {
         while (!data.isEmpty()) {
             rootNode = data.pop(this);
 
-            if (rootNode.getBound() > optimalNode.getProfit()) {
+            if (rootNode.getBound() > optimalNode.getValue()) {
                 // set childNode to the child that *does* include the next item
                 childNode = new Node(this, rootNode, true);
 
                 // if childNode's value is bigger than current largest value
-                if (childNode.getWeight() <= maxWeight && childNode.getProfit() > optimalNode.getProfit()) {
+                if (childNode.getWeight() <= maxWeight && childNode.getValue() > optimalNode.getValue()) {
                     optimalNode = childNode;
                 }
 
                 childNode.calculateBound();
-                if (childNode.getBound() > optimalNode.getProfit()) {
+                if (childNode.getBound() > optimalNode.getValue()) {
                     //System.out.println("Putting to queue because " + childNode.getBound() + ">" + optimalNode.getValue());
 
                     data.push(childNode);
@@ -109,7 +87,7 @@ public class BackPack {
                 childNode = new Node(this, rootNode, false);
 
                 childNode.calculateBound();
-                if (childNode.getBound() > optimalNode.getProfit()) {
+                if (childNode.getBound() > optimalNode.getValue()) {
                     //System.out.println("Putting to queue because " + childNode.getBound() + ">" + optimalNode.getValue());
                     data.push(childNode);
                 }
@@ -118,7 +96,4 @@ public class BackPack {
         }
     }
 
-    public int getItemCount() {
-        return items.size();
-    }
 }

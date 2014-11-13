@@ -11,13 +11,14 @@ import java.util.List;
  */
 public class Node {
 
-    private BackPack bPack;
-    public final int level;
-    private double bound = -1;
+    private final BackPack bPack;
 
-    private final double weight; // total weight of the branch that ends with this Node
-    private double value; // total value of the branch that ends with this Node
-    private List<Item> branch;
+    public final int level;
+    private int bound = -1;
+
+    private final int weight; // total weight of the branch that ends with this Node
+    private int value; // total value of the branch that ends with this Node
+    private List<Item> branch; // all items included in the branch that ends with this Node
 
     public Node(BackPack bPack, Node parentNode, boolean includeNext) {
         this.bPack = bPack;
@@ -27,7 +28,7 @@ public class Node {
         if (includeNext) {
             // if so required, include "this" level
             weight = parentNode.weight + bPack.getItems().get(level).getWeight();
-            value = parentNode.value + bPack.getItems().get(level).getPrice();
+            value = parentNode.value + bPack.getItems().get(level).getValue();
             this.branch.add(bPack.getItems().get(level));
         } else {
             weight = parentNode.weight;
@@ -48,18 +49,22 @@ public class Node {
         return level;
     }
 
-    public double getProfit() {
+    public int getValue() {
         return value;
     }
 
 
-    public double getWeight() {
+    public int getWeight() {
         return weight;
     }
 
 
     public double getBound() {
         return bound;
+    }
+
+    public List<Item> getBranch() {
+        return branch;
     }
 
     public void calculateBound() {
@@ -76,7 +81,7 @@ public class Node {
             while (childLevel < bPack.getItemCount() &&
                     totalWeight + (childItem = bPack.getItems().get(childLevel)).getWeight() <= bPack.getMaxWeight()) {
                 totalWeight += childItem.getWeight();
-                bound += childItem.getPrice();
+                bound += childItem.getValue();
                 childLevel++;
 
             }
@@ -85,7 +90,7 @@ public class Node {
             // then we attempt to estimate
             if (childLevel < bPack.getItemCount()) {
                 // TODO: understand this
-                bound += (bPack.getMaxWeight() - totalWeight) * bPack.getItems().get(childLevel).getRate();
+                bound += (bPack.getMaxWeight() - totalWeight) * bPack.getItems().get(childLevel).getRatio();
             }
 
         }
