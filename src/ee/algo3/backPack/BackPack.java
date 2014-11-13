@@ -76,46 +76,49 @@ public class BackPack {
         return optimalNode.getProfit();
     }
 
-    private void calculate(MagazineArray() data) {
+    private void calculate(MagazineArray data) {
         Collections.sort(items);
 
         Node rootNode = new Node(this); // the top of the decision tree (at first)
         rootNode.calculateBound();
-        data.put(rootNode);
+        data.push(rootNode);
 
         Node childNode;
         optimalNode = new Node(this);
 
         while (!data.isEmpty()) {
-            rootNode = data.get();
+            rootNode = data.pop(this);
 
-            if (rootNode.getBound() > optimalNode.getValue()) {
+            if (rootNode.getBound() > optimalNode.getProfit()) {
                 // set childNode to the child that *does* include the next item
                 childNode = new Node(this, rootNode, true);
 
                 // if childNode's value is bigger than current largest value
-                if (childNode.getWeight() <= maxWeight && childNode.getValue() > optimalNode.getValue()) {
+                if (childNode.getWeight() <= maxWeight && childNode.getProfit() > optimalNode.getProfit()) {
                     optimalNode = childNode;
                 }
 
                 childNode.calculateBound();
-                if (childNode.getBound() > optimalNode.getValue()) {
+                if (childNode.getBound() > optimalNode.getProfit()) {
                     //System.out.println("Putting to queue because " + childNode.getBound() + ">" + optimalNode.getValue());
 
-                    data.put(childNode);
+                    data.push(childNode);
                 }
 
                 // set childNode to the child that *does not* include the next item
                 childNode = new Node(this, rootNode, false);
 
                 childNode.calculateBound();
-                if (childNode.getBound() > optimalNode.getValue()) {
+                if (childNode.getBound() > optimalNode.getProfit()) {
                     //System.out.println("Putting to queue because " + childNode.getBound() + ">" + optimalNode.getValue());
-                    data.put(childNode);
+                    data.push(childNode);
                 }
 
             }
         }
     }
 
+    public int getItemCount() {
+        return items.size();
+    }
 }

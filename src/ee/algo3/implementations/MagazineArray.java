@@ -1,6 +1,7 @@
 package ee.algo3.implementations;
 
 import ee.algo3.Nodes.Node;
+import ee.algo3.backPack.BackPack;
 
 /**
  * (stack - LIFO) tuleb realiseerida dünaamilise massiivi abil.
@@ -28,9 +29,8 @@ public class MagazineArray extends DynamicArray {
     /**
      * Eemaldab ja väljastab magasini viimasena sisestatud elemendi O(1)
      */
-    public Node pop (){
-        Node n = new Node();
-
+    public Node pop (BackPack bpack){
+        Node n = new Node(bpack);
         n = super.rem();
 
         return n;
