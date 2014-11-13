@@ -57,14 +57,14 @@ public class BackPack {
 
 
 
-    public Node knapSackDepthFirst(ArrayList<Item> items, int maxWeight) {
+    public Node backPackDepthFirst(ArrayList<Item> items, int maxWeight) {
         this.maxWeight = maxWeight;
         this.items = items;
         calculate(new MagazineArray());
         return optimalNode;
     }
 
-    public double knapSackDepthFirst(int[] itemWeights, int[] itemValues, int maxWeight) {
+    public double backPackDepthFirst(int[] itemWeights, int[] itemValues, int maxWeight) {
 
         this.maxWeight = maxWeight;
         items = new ArrayList<Item>(itemValues.length);
