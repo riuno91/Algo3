@@ -13,8 +13,6 @@ public class Main {
 
         List<Item> inputItems = null;
 
-
-
         int maxWeight = inputItems.get(0).getWeight();
         inputItems = inputItems.subList(1, inputItems.size());
 

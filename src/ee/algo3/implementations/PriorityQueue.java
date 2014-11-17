@@ -1,6 +1,9 @@
 package ee.algo3.implementations;
 
 
+import ee.algo3.Nodes.Node;
+import ee.algo3.backPack.BackPack;
+
 /**
  * Created by Rauno-Sten Reile 104468IAPB on 14.10.2014.
  */
@@ -13,23 +16,24 @@ public class PriorityQueue extends  DynamicArray{
      *lisame esimese elemendi massiivi (suvaline), et alates positsioonist 1 hakataks t2itma
      * määrame järgmise positsiooniks 1
      */
-    public PriorityQueue() {
+    public PriorityQueue(BackPack bPack) {
 
         minBinHeap = new DynamicArray();
-        minBinHeap.add(-11);
+        Node fnode = new Node (bPack);
+        minBinHeap.add(fnode);
         nextpos = 1;
     }
 
     /**
      * lisame elemendi järjekorda
-     * @param x - number, mis lisatakse minimaalsesse kuhja
+     * @param n - number, mis lisatakse minimaalsesse kuhja
      */
-    public void enqueue (int x){
+    public void enqueue (Node n){
 
         int positsion = nextpos; // int x-i positsioon, kuhu lisatakse
-        minBinHeap.add(x); // lisain xi alguses arraysse
+        minBinHeap.add(n); // lisain xi alguses arraysse
 
-        while(true){
+        /*while(true){
 
             int upParentPos, parent;  // int-d ülemelementi jaoks
 
@@ -49,7 +53,7 @@ public class PriorityQueue extends  DynamicArray{
             }
 
             positsion = upParentPos; // m22ran elemendi positsiooniks ylemelemendi positsiooni
-        }
+        }*/
 
         nextpos++; // suurendan järmiseks elemendiks kohta
     }
@@ -58,9 +62,8 @@ public class PriorityQueue extends  DynamicArray{
      * Antakse välja kuhja tipus olev element
      * @return - tagastan tipus oleva, minimaalse elemendi
      */
-    public int dequeue(){
-
-        int n = 0, last = 0; //int-d, yks viimane teine esimene element
+    public Node dequeue(){
+        Node n, last; //int-d, yks viimane teine esimene element
 
         n = minBinHeap.get(1); // v6tan esimese m2llu
 
@@ -96,7 +99,7 @@ public class PriorityQueue extends  DynamicArray{
 
 
         //tsükkel, mis korrastab kuhja
-        while(true){
+       /* while(true){
             int leftParent = 2*curPos,  rightParent = 2*curPos + 1, smallestPos = curPos;
 
             //võrreldakse, kas vasak parrent on väiksem, kui hetkel võrreldav element, kui jah, siis
@@ -123,7 +126,7 @@ public class PriorityQueue extends  DynamicArray{
 
             }else break;
 
-        }
+        }*/
 
     }
 

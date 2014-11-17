@@ -1,6 +1,7 @@
 package ee.algo3.implementations;
 
 import ee.algo3.Nodes.Node;
+import ee.algo3.backPack.BackPack;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -46,7 +47,8 @@ public class DynamicArray {
      * @return
      */
     public Node rem(){
-        Node lastElement = new Node();
+        BackPack tempBpack = new BackPack();
+        Node lastElement = new Node(tempBpack);
         if (size > -1) {
              lastElement = array.get(size);
             array.set(size,null);
