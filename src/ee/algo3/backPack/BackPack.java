@@ -29,7 +29,8 @@ public class BackPack {
     public Node BackPackDepthFirst(List<Item> items, int maxWeight) {
         this.maxWeight = maxWeight;			// maksimaalne kaal inputist
         this.items = items;					// input itemid, koik, list
-        calculate(new MagazineArray());
+        MagazineArray mga = new MagazineArray();
+        calculate(mga);
         return optimalNode;
     }
 
@@ -51,7 +52,6 @@ public class BackPack {
 
         Collections.sort(items);
 
-
         // kas see on siis ylemine node???
         //weigth on 0,
         //price on ka 0
@@ -63,10 +63,10 @@ public class BackPack {
 
         Node childNode;
         optimalNode = new Node(this);
-
         while (!data.isEmpty()) {
-            rootNode = data.pop(this);
+            rootNode = data.pop();
 
+            System.out.println ("Data size on " + data.len()+ "    " + optimalNode.getBound());
             if (rootNode.getBound() > optimalNode.getValue()) {
                 // set childNode to the child that *does* include the next item
                 childNode = new Node(this, rootNode, true);

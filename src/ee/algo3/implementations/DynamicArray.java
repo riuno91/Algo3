@@ -2,6 +2,7 @@ package ee.algo3.implementations;
 
 import ee.algo3.Nodes.Node;
 import ee.algo3.backPack.BackPack;
+import ee.algo3.items.Item;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -32,13 +33,18 @@ public class DynamicArray {
      * siis kasvatame massiivi.
      * @param node
      */
-    public void add(Node node){
+   public void add(Node node){
 
-        size++;
-     /*   if (size >= array.size()) {
-            increaseListSize();
-        }*/
-        array.set(size,node);
+       size++;
+       if (size >= array.size()) {
+           ArrayList<Node> tempArray = new ArrayList<Node>(array.size() * 2);
+           for (int i = 0 ; i < array.size() ; i++) {
+               tempArray.set(i,array.get(i));
+           }
+           this.array = tempArray;
+        }
+
+       array.add(node);
     }
 
     /**
@@ -50,13 +56,15 @@ public class DynamicArray {
         BackPack tempBpack = new BackPack();
         Node lastElement = new Node(tempBpack);
         if (size > -1) {
-             lastElement = array.get(size);
+            lastElement = array.get(size);
             array.set(size,null);
-/*
             if (array.size() / (size + 1) < 0.25) {
-                decreaseListSize();
+                ArrayList<Node> tempArray = new ArrayList<Node>(array.size()/2);
+                for (int i = 0 ; i < array.size() ; i++) {
+                    tempArray.set(i,array.get(i));
+                }
+                this.array = tempArray;
             }
-*/
             size--;
             return lastElement;
         } else {
@@ -102,25 +110,24 @@ public class DynamicArray {
      * teeme array kaks kord suuremaks,
      * et saaks sisestada uusi täisarve array'isse
      */
-  /*  private void increaseListSize(){
+   /* private void increaseListSize(){
 
         if (array.size() == 0){
-            array = ArrayList<Node>.
-            array = Arrays.copyOf(array, 1);
+            array = new ArrayList<Node>();
+            array = Arrays.copyOf(array,1);
         }else{
-            array = Arrays.copyOf(array, array.length * 2);
+            array = Arrays.copyOf(array, array.size() * 2);
         }
 
-    }
-*/
+    }*/
     /**
      * teeme array kokkuhoiu nimel kaks korda väiksemaks,
      * juhul kui eemaldame sellest elemente
      *
      */
-    /*
-    private void decreaseListSize(){
+
+   /* private void decreaseListSize(){
         array = Arrays.copyOf(array, array.length / 2);
-    }
-*/
+    }*/
+
 }

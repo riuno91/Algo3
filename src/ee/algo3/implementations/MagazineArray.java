@@ -29,11 +29,9 @@ public class MagazineArray extends DynamicArray {
     /**
      * Eemaldab ja väljastab magasini viimasena sisestatud elemendi O(1)
      */
-    public Node pop (BackPack bpack){
-        Node n = new Node(bpack);
-        n = super.rem();
+    public Node pop (){
 
-        return n;
+        return super.rem();
     }
 
     /**
@@ -41,10 +39,9 @@ public class MagazineArray extends DynamicArray {
      */
     public boolean isEmpty(){
 
-        if ((super.len()) <= 0){
+        if (super.get(0) == null){
             return true;
         }else return false;
-
 
     }
 }
