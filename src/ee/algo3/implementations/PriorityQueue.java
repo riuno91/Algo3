@@ -33,9 +33,10 @@ public class PriorityQueue extends  DynamicArray{
         int positsion = nextpos; // int x-i positsioon, kuhu lisatakse
         minBinHeap.add(n); // lisain xi alguses arraysse
 
-        /*while(true){
+        while(true){
 
-            int upParentPos, parent;  // int-d ülemelementi jaoks
+            int upParentPos;
+            Node parent;  // int-d ülemelementi jaoks
 
             //kontrollin ega element ei ole esimene
             if (positsion <= 1){
@@ -45,15 +46,15 @@ public class PriorityQueue extends  DynamicArray{
             upParentPos = positsion/2;   // v6tan ylemelemendi positsiooni (bin kuhjal alati ylemine postisoon /2 v2iksem)
             parent = minBinHeap.get(upParentPos); //v6tan elemendi arvulise v22rtuse
 
-            if(parent < x){//kui ylemin parent on v2iksem x-st(min kuhja reegel), siis l6petan
+            if(parent.getValue() < n.getValue()){//kui ylemin parent on v2iksem x-st(min kuhja reegel), siis l6petan
                 break;
             }else{ // vastasel korral vahetan positsioonid parrentiga
-                minBinHeap.put(x, upParentPos);
+                minBinHeap.put(n, upParentPos);
                 minBinHeap.put(parent, positsion);
             }
 
             positsion = upParentPos; // m22ran elemendi positsiooniks ylemelemendi positsiooni
-        }*/
+        }
 
         nextpos++; // suurendan järmiseks elemendiks kohta
     }

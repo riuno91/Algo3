@@ -38,6 +38,4 @@ public class Item implements Comparable<Item> {
     public int compareTo(Item o) {
         return getWeight() - o.getWeight();
     }
-
-
 }

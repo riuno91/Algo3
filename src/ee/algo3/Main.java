@@ -13,20 +13,22 @@ public class Main {
 
         List<Item> inputItems = new ArrayList<Item>();
 
-        Item i1 = new Item(18,10);
-        inputItems.add(i1);
-        Item i2 = new Item(10,20);
-        inputItems.add(i2);
-        Item i3 = new Item(27,15);
+
+        Item i3 = new Item(15,27);
         inputItems.add(i3);
-        Item i4 = new Item(3,4);
+        Item i1 = new Item(10,18);
+        inputItems.add(i1);
+        Item i2 = new Item(20,10);
+        inputItems.add(i2);
+        Item i4 = new Item(4,3);
         inputItems.add(i4);
-        Item i5 = new Item(3,5);
+        Item i5 = new Item(5,3);
         inputItems.add(i5);
 
         BackPack BackPack = new BackPack();
 
-        Node resultNode = BackPack.BackPackDepthFirst(inputItems, 25);
+        //Node resultNode = BackPack.BackPackDepthFirst(inputItems, 25);
+        Node resultNode = BackPack.knapSackBestFirst(inputItems, 25);
         List<Item> resultItems = resultNode.getBranch();
         List<Item> resultItems2 = new ArrayList<Item>(1);
         resultItems2.add(new Item(resultNode.getWeight(), resultNode.getValue()));

@@ -2,7 +2,7 @@ package ee.algo3.backPack;
 
 
 import ee.algo3.Nodes.Node;
-import ee.algo3.implementations.MagazineArray;
+import ee.algo3.implementations.*;
 import ee.algo3.items.Item;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +30,7 @@ public class BackPack {
         this.maxWeight = maxWeight;			// maksimaalne kaal inputist
         this.items = items;					// input itemid, koik, list
         MagazineArray mga = new MagazineArray();
-        calculate(mga);
+        calculateDepth(mga);
         return optimalNode;
     }
 
@@ -46,7 +46,7 @@ public class BackPack {
 
     // mida sa siia sisse votad ma ei saa aru, mis sul viga on?
 
-    private void calculate(MagazineArray data) {
+    private void calculateDepth(MagazineArray data) {
         //peame itemid ara sortima, et algo saaks oigesti teha
         // korgema kaaluga tulevad esimesena
 
@@ -64,9 +64,9 @@ public class BackPack {
         Node childNode;
         optimalNode = new Node(this);
         while (!data.isEmpty()) {
-            rootNode = data.pop();
+            System.out.println("Data size on " + data.len() + "    " + optimalNode.getBound());
 
-            System.out.println ("Data size on " + data.len()+ "    " + optimalNode.getBound());
+            rootNode = data.pop();
             if (rootNode.getBound() > optimalNode.getValue()) {
                 // set childNode to the child that *does* include the next item
                 childNode = new Node(this, rootNode, true);
@@ -96,4 +96,55 @@ public class BackPack {
         }
     }
 
+    public Node knapSackBestFirst(List<Item> items, int maxWeight) {
+        this.maxWeight = maxWeight;
+        this.items = items;
+        calculateBest(new PriorityQueue(this));
+        return optimalNode;
+    }
+
+    private void calculateBest(PriorityQueue data) {
+        //peame itemid ara sortima, et algo saaks oigesti teha
+        // korgema kaaluga tulevad esimesena
+
+        Collections.sort(items);
+
+        Node rootNode = new Node(this); // the top of the decision tree (at first)
+        rootNode.calculateBound();
+        data.enqueue(rootNode);
+
+        Node childNode;
+        optimalNode = new Node(this);
+        while (!data.isEmpty()) {
+            System.out.println("Data size on " + data.len() + "    " + optimalNode.getBound());
+
+            rootNode = data.dequeue();
+            if (rootNode.getBound() > optimalNode.getValue()) {
+                // set childNode to the child that *does* include the next item
+                childNode = new Node(this, rootNode, true);
+
+                // if childNode's value is bigger than current largest value
+                if (childNode.getWeight() <= maxWeight && childNode.getValue() > optimalNode.getValue()) {
+                    optimalNode = childNode;
+                }
+
+                childNode.calculateBound();
+                if (childNode.getBound() > optimalNode.getValue()) {
+                    //System.out.println("Putting to queue because " + childNode.getBound() + ">" + optimalNode.getValue());
+
+                    data.enqueue(childNode);
+                }
+
+                // set childNode to the child that *does not* include the next item
+                childNode = new Node(this, rootNode, false);
+
+                childNode.calculateBound();
+                if (childNode.getBound() > optimalNode.getValue()) {
+                    //System.out.println("Putting to queue because " + childNode.getBound() + ">" + optimalNode.getValue());
+                    data.enqueue(childNode);
+                }
+
+            }
+        }
+    }
 }

@@ -70,7 +70,7 @@ public class Node {
     public void calculateBound() {
         bound = 0;
         int childLevel;
-        double totalWeight;
+        int totalWeight;
 
         if (weight < bPack.getMaxWeight()) {
             bound = value;
@@ -83,13 +83,11 @@ public class Node {
                 totalWeight += childItem.getWeight();
                 bound += childItem.getValue();
                 childLevel++;
-
             }
 
             // if the above loop terminated (weight over limit) before we managed to fully pass the tree down
             // then we attempt to estimate
             if (childLevel < bPack.getItemCount()) {
-                // TODO: understand this
                 bound += (bPack.getMaxWeight() - totalWeight) * bPack.getItems().get(childLevel).getRatio();
             }
 

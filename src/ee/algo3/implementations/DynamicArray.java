@@ -36,15 +36,17 @@ public class DynamicArray {
    public void add(Node node){
 
        size++;
+       array.add(null);
        if (size >= array.size()) {
            ArrayList<Node> tempArray = new ArrayList<Node>(array.size() * 2);
            for (int i = 0 ; i < array.size() ; i++) {
                tempArray.set(i,array.get(i));
+
            }
            this.array = tempArray;
-        }
+       }
 
-       array.add(node);
+        array.set(size,node);
     }
 
     /**
@@ -65,6 +67,7 @@ public class DynamicArray {
                 }
                 this.array = tempArray;
             }
+
             size--;
             return lastElement;
         } else {
