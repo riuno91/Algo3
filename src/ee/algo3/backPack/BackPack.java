@@ -7,11 +7,16 @@ import ee.algo3.items.Item;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Created by Rauno-Sten Reile 104468IAPB & Henri Liiv 103995 on 11.11.2014.
+ */
 
 public class BackPack {
-    private int maxWeight;
-    private List<Item> items;
-    private Node optimalNode;
+
+    private int maxWeight;  // maksimaalne koti kaal
+    private List<Item> items;// List asjadest, mis on kotis
+    private Node bestNode; //Node, mis on parim
+
 
     public int getMaxWeight() {
         return maxWeight;
@@ -25,121 +30,100 @@ public class BackPack {
         return items.size();
     }
 
-
+    /**
+     * Arvutatakse välja parim variant sügavuti otsinguga
+     * @param items - list itemitest
+     * @param maxWeight - koti maksimaalkaal, mida ei tohi ületada
+     * @return - tagastab parima lehe
+     */
     public Node BackPackDepthFirst(List<Item> items, int maxWeight) {
         this.maxWeight = maxWeight;			// maksimaalne kaal inputist
         this.items = items;					// input itemid, koik, list
-        MagazineArray mga = new MagazineArray();
-        calculateDepth(mga);
-        return optimalNode;
+        MagazineArray mga = new MagazineArray(); // Uus Stack, kuhu talletatakse Node-d
+        calculateDepth(mga);    //arvutatakse Node-d Stacki
+        return bestNode;     // tagastatakse parim leht, parima valuega
     }
-
-
-    public Item[] getSetOfBestItems() {
-        return optimalNode.getBranch().toArray(new Item[optimalNode.getBranch().size()]);
-    }
-
-    public List<Item> getListSetOfBestItems() {
-        return optimalNode.getBranch();
-    }
-
-
-    // mida sa siia sisse votad ma ei saa aru, mis sul viga on?
 
     private void calculateDepth(MagazineArray data) {
-        //peame itemid ara sortima, et algo saaks oigesti teha
-        // korgema kaaluga tulevad esimesena
 
-        Collections.sort(items);
+        Collections.sort(items); // sorteeritakse kaalu alusel item-d
 
-        // kas see on siis ylemine node???
-        //weigth on 0,
-        //price on ka 0
-        //teeme boundi ka sellele libule
+        Node rootNode = new Node(this); // esimene node, mis pannakse stacki
+        rootNode.calculateBound();      // arvutatakse esimese node väärtus
+        data.push(rootNode);            // pannakse esimene node stacki
 
-        Node rootNode = new Node(this); // the top of the decision tree (at first)
-        rootNode.calculateBound();
-        data.push(rootNode);
+        Node childNode;                 //tekitatakse naaberleht
+        bestNode = new Node(this);   //tekitatakse parima node leht
+        while (!data.isEmpty()) { //tsükkel, mida käiakse, kuni stackis on itemeid, et leida parim
 
-        Node childNode;
-        optimalNode = new Node(this);
-        while (!data.isEmpty()) {
-            System.out.println("Data size on " + data.len() + "    " + optimalNode.getBound());
+            rootNode = data.pop(); //võtame esimese node'i
 
-            rootNode = data.pop();
-            if (rootNode.getBound() > optimalNode.getValue()) {
-                // set childNode to the child that *does* include the next item
-                childNode = new Node(this, rootNode, true);
+            if (rootNode.getBound() > bestNode.getValue()) { //kui esimese node koguväärtus on suurem kui parima node koguväärtus
 
-                // if childNode's value is bigger than current largest value
-                if (childNode.getWeight() <= maxWeight && childNode.getValue() > optimalNode.getValue()) {
-                    optimalNode = childNode;
+                childNode = new Node(this, rootNode, true); //tekitame naabernode, mis on rootnode naaber
+
+                if (childNode.getWeight() <= maxWeight && childNode.getValue() > bestNode.getValue()) {
+                    //kui naabernode kaal jääb maksimumile alla ja value on suurem, kui parima oma, siis valime selle parimaks
+                    bestNode = childNode;
                 }
 
-                childNode.calculateBound();
-                if (childNode.getBound() > optimalNode.getValue()) {
-                    //System.out.println("Putting to queue because " + childNode.getBound() + ">" + optimalNode.getValue());
+                childNode.calculateBound();// arvutan childnode koguväärtuse
 
+                if (childNode.getBound() > bestNode.getValue()) {
+                    //lisan childnode stacki kui ta koguväärtus on parem kui parima node oma
                     data.push(childNode);
                 }
 
-                // set childNode to the child that *does not* include the next item
-                childNode = new Node(this, rootNode, false);
+                childNode = new Node(this, rootNode, false); // Lisan ka teise node, millel puudub eelneva välju ja weight
 
                 childNode.calculateBound();
-                if (childNode.getBound() > optimalNode.getValue()) {
-                    //System.out.println("Putting to queue because " + childNode.getBound() + ">" + optimalNode.getValue());
+                if (childNode.getBound() > bestNode.getValue()) { //arvtuan koguväärtuse ja vajadusel lisan stacki
                     data.push(childNode);
                 }
-
             }
         }
     }
 
-    public Node knapSackBestFirst(List<Item> items, int maxWeight) {
+    public Node knapSackBestFirst(List<Item> items, int maxWeight) { // best first algoritm, sisu sama, mis depth first
         this.maxWeight = maxWeight;
         this.items = items;
         calculateBest(new PriorityQueue(this));
-        return optimalNode;
+        return bestNode;
     }
 
     private void calculateBest(PriorityQueue data) {
-        //peame itemid ara sortima, et algo saaks oigesti teha
-        // korgema kaaluga tulevad esimesena
-
+        // sordime kõik itemid kaalu järgi
         Collections.sort(items);
 
-        Node rootNode = new Node(this); // the top of the decision tree (at first)
-        rootNode.calculateBound();
-        data.enqueue(rootNode);
+        Node rootNode = new Node(this); // esimese node tekitamine
+        rootNode.calculateBound();  //arvutatakse esimese node väärtus
+        data.enqueue(rootNode); //lisatakse see priorityqueuesse
 
-        Node childNode;
-        optimalNode = new Node(this);
-        while (!data.isEmpty()) {
-            System.out.println("Data size on " + data.len() + "    " + optimalNode.getBound());
+        Node childNode;         // tekitame childnode
+        bestNode = new Node(this);  //tekitame parima node
+        while (!data.isEmpty()) {   //kuni on data-t queue-s
 
-            rootNode = data.dequeue();
-            if (rootNode.getBound() > optimalNode.getValue()) {
-                // set childNode to the child that *does* include the next item
-                childNode = new Node(this, rootNode, true);
+            rootNode = data.dequeue();  //võtame välja rootnode
+            if (rootNode.getBound() > bestNode.getValue()) { //vaatame, kas rootnode koguväärtus on suurem, kui bestnode väärtus
 
-                // if childNode's value is bigger than current largest value
-                if (childNode.getWeight() <= maxWeight && childNode.getValue() > optimalNode.getValue()) {
-                    optimalNode = childNode;
+                childNode = new Node(this, rootNode, true);     //lisame childnode, millel on järgmine item
+
+                // juhul, kui childnodel on koguväärtus suurim, siis määrame ta parimaks
+                if (childNode.getWeight() <= maxWeight && childNode.getValue() > bestNode.getValue()) {
+                    bestNode = childNode;
                 }
 
-                childNode.calculateBound();
-                if (childNode.getBound() > optimalNode.getValue()) {
-                    //System.out.println("Putting to queue because " + childNode.getBound() + ">" + optimalNode.getValue());
-
+                childNode.calculateBound(); //arvutame childnode koguväärtuse
+                if (childNode.getBound() > bestNode.getValue()) {
+                    //kui childnode koguväärtus on parem kui parima node väärtus, siis lisame ta queuesse
                     data.enqueue(childNode);
                 }
 
-                // set childNode to the child that *does not* include the next item
+                // lisame childnode naabrile, millele pole järgmise väärtusi
                 childNode = new Node(this, rootNode, false);
 
-                childNode.calculateBound();
-                if (childNode.getBound() > optimalNode.getValue()) {
+                childNode.calculateBound(); // arvuta childnode väärtus ning kui see on parima väärtusest suurem, lisa queuesse.
+                if (childNode.getBound() > bestNode.getValue()) {
                     //System.out.println("Putting to queue because " + childNode.getBound() + ">" + optimalNode.getValue());
                     data.enqueue(childNode);
                 }

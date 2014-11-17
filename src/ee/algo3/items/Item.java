@@ -2,7 +2,7 @@ package ee.algo3.items;
 
 
 /**
- * Created by Riuno on 11.11.2014.
+ * Created by Rauno-Sten Reile 104468IAPB on 11.11.2014.
  */
 public class Item implements Comparable<Item> {
     private int weight;

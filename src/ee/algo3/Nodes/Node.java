@@ -11,22 +11,25 @@ import java.util.List;
  */
 public class Node {
 
-    private final BackPack bPack;
+    private final BackPack bPack; //Igale lehel-le vastab backpack
+    public final int level;     // lehe kõrgus puus
+    private int bound = -1;     //lehe koguväärtus
+    private final int weight; // lehe koguraskus
+    private int value; // lehe väärtus
+    private List<Item> branch; // Itemite list, mis on lehes
 
-    public final int level;
-    private int bound = -1;
-
-    private final int weight; // total weight of the branch that ends with this Node
-    private int value; // total value of the branch that ends with this Node
-    private List<Item> branch; // all items included in the branch that ends with this Node
-
+    /**
+     * Node konstruktor, kus lisatakse node algväärtused
+     * @param bPack - viide seljakotile, kus on esemed
+     * @param parentNode - viide naabernode-le
+     * @param includeNext   - kas lisatakse järgmine item või mitte
+     */
     public Node(BackPack bPack, Node parentNode, boolean includeNext) {
-        this.bPack = bPack;
-        level = parentNode.level + 1;
-        branch = new ArrayList<Item>(parentNode.branch); // shallow copy is needed
+        this.bPack = bPack;     // lisa koti
+        level = parentNode.level + 1;   // järgmise lehe väärtus on 1 võrra kõrgem, kui eelmise oma
+        branch = new ArrayList<Item>(parentNode.branch);    //lisan uue item-ite listi
 
         if (includeNext) {
-            // if so required, include "this" level
             weight = parentNode.weight + bPack.getItems().get(level).getWeight();
             value = parentNode.value + bPack.getItems().get(level).getValue();
             this.branch.add(bPack.getItems().get(level));
@@ -36,6 +39,10 @@ public class Node {
         }
     }
 
+    /**
+     * Konstruktor esimese node tegemiseks
+     * @param bPack - node kott, kus ta asub
+     */
     public Node(BackPack bPack) {
         this.bPack = bPack;
         this.weight = 0;
@@ -62,26 +69,33 @@ public class Node {
         return branch;
     }
 
+    /**
+     * Koguväärtuse arvutamise kalkulaator
+     */
     public void calculateBound() {
         bound = 0;
         int childLevel;
         int totalWeight;
 
+        // Kui raskust ei ületa
         if (weight < bPack.getMaxWeight()) {
-            bound = value;
-            childLevel = level + 1;
-            totalWeight = weight;
+            bound = value; //algväärtustame koguväärtuse samaseks väärtusega
+            childLevel = level + 1; // määrame childleveli
+            totalWeight = weight;   // määrame totalweightiks = lehe raskusega
 
-            Item childItem;
+            Item childItem; //teeme childItemi
+
+            //kuni totalweight ei ületa bpacki max raskust ning itemite count ei ületa kogu seljakoti itemite arvu
             while (childLevel < bPack.getItemCount() &&
                     totalWeight + (childItem = bPack.getItems().get(childLevel)).getWeight() <= bPack.getMaxWeight()) {
+            // suurendame koguraskus childitemi võrra ning lisame koguväärtusele childItemi väärtused
                 totalWeight += childItem.getWeight();
                 bound += childItem.getValue();
                 childLevel++;
             }
 
-            // if the above loop terminated (weight over limit) before we managed to fully pass the tree down
-            // then we attempt to estimate
+            // kui while lõppes enne, kui jõudsime puu lõppu, siis suurendame boundi järelejäänud kaalu ja eelmise elemendi kaalu/väärtuse
+            //suhte korrutise võrra
             if (childLevel < bPack.getItemCount()) {
                 bound += (bPack.getMaxWeight() - totalWeight) * bPack.getItems().get(childLevel).getRatio();
             }
