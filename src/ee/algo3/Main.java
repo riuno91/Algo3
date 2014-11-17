@@ -4,15 +4,31 @@ import ee.algo3.Nodes.Node;
 import ee.algo3.backPack.BackPack;
 import ee.algo3.items.Item;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
+
+        Scanner s = new Scanner(new File(args[0] + ".in"));
         List<Item> inputItems = new ArrayList<Item>();
 
+        while (s.hasNextLine()){
+            String[] splitline = s.nextLine().split(" ");
+            if(splitline.length == 2) {
+                inputItems.add(new Item(Integer.parseInt(splitline[1]), Integer.parseInt(splitline[0])));
+            }else{
+                inputItems.add(new Item(Integer.parseInt(splitline[0]),0));
+            }
+        }
+        s.close();
+
+
+        /*
         Item i3 = new Item(15,27);
         inputItems.add(i3);
         Item i1 = new Item(10,18);
@@ -23,7 +39,7 @@ public class Main {
         inputItems.add(i4);
         Item i5 = new Item(5,3);
         inputItems.add(i5);
-
+        */
         BackPack BackPack = new BackPack();
 
         Node resultNode = BackPack.BackPackDepthFirst(inputItems, 25);
@@ -34,6 +50,13 @@ public class Main {
         resultItems2.addAll(resultItems);
 
         System.out.println (resultItems2);
+
+
+        FileWriter writer = new FileWriter(args[0] + ".out");
+        for(Item item: resultItems2) {
+            writer.write(item.getValue() + " " + item.getWeight()+ "\n");
+        }
+        writer.close();
     }
 
 }
