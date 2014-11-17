@@ -13,7 +13,6 @@ public class Main {
 
         List<Item> inputItems = new ArrayList<Item>();
 
-
         Item i3 = new Item(15,27);
         inputItems.add(i3);
         Item i1 = new Item(10,18);

@@ -42,11 +42,6 @@ public class Node {
         this.value = 0;
         this.level = -1;
         branch = new ArrayList<Item>();
-        // don't add item to branch
-    }
-
-    public int getLevel() {
-        return level;
     }
 
     public int getValue() {
