@@ -27,7 +27,6 @@ public class Main {
         }
         s.close();
 
-
         /*
         Item i3 = new Item(15,27);
         inputItems.add(i3);

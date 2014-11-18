@@ -100,25 +100,25 @@ public class PriorityQueue extends  DynamicArray{
 
 
         //tsükkel, mis korrastab kuhja
-       /* while(true){
+       while(true){
             int leftParent = 2*curPos,  rightParent = 2*curPos + 1, smallestPos = curPos;
 
             //võrreldakse, kas vasak parrent on väiksem, kui hetkel võrreldav element, kui jah, siis
             //märgitakse väikseimaks vasak parrent
-            if (leftParent <(nextpos-1) && minBinHeap.get(leftParent) < minBinHeap.get(smallestPos)) {
+            if (leftParent <(nextpos-1) && minBinHeap.get(leftParent).getValue() < minBinHeap.get(smallestPos).getValue()) {
                 smallestPos = leftParent;
             }
 
             //võrreldakse, kas parem parrent on väiksem, kui hetkel võrreldav element, kui jah, siis
             //märgitakse väikseimaks parem parrent
-            if (rightParent < (nextpos-1) && minBinHeap.get(rightParent) < minBinHeap.get(smallestPos)) {
+            if (rightParent < (nextpos-1) && minBinHeap.get(rightParent).getValue() < minBinHeap.get(smallestPos).getValue()) {
                 smallestPos = rightParent;
             }
 
             // kui left või right parrent on väiksem, kui hetkel võrreldav element, siis tehakse asendus
 
             if (curPos != smallestPos){
-                int smaller = minBinHeap.get(smallestPos);
+                Node smaller = minBinHeap.get(smallestPos);
                 //asendan kaks elementi
                 minBinHeap.put(minBinHeap.get(curPos),smallestPos);
                 minBinHeap.put(smaller,curPos);
@@ -127,7 +127,7 @@ public class PriorityQueue extends  DynamicArray{
 
             }else break;
 
-        }*/
+        }
 
     }
 
