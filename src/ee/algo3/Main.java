@@ -42,7 +42,7 @@ public class Main {
         BackPack BackPack = new BackPack();
 
         //Node resultNode = BackPack.BackPackDepthFirst(inputItems, inputItems.get(0).getWeight());
-        Node resultNode = BackPack.knapSackBestFirst(inputItems, inputItems.get(0).getWeight());
+        Node resultNode = BackPack.BackPackBestFirst(inputItems, inputItems.get(0).getWeight());
         List<Item> resultItems = resultNode.getBranch();
         List<Item> resultItems2 = new ArrayList<Item>(1);
         resultItems2.add(new Item(resultNode.getWeight(), resultNode.getValue()));
