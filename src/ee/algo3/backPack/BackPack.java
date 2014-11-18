@@ -123,7 +123,7 @@ public class BackPack {
                 childNode = new Node(this, rootNode, false);
 
                 childNode.calculateBound(); // arvuta childnode väärtus ning kui see on parima väärtusest suurem, lisa queuesse.
-                if (childNode.getBound() > bestNode.getValue()) {
+                if (childNode.getBound() > bestNode.getBound()) {
                     //System.out.println("Putting to queue because " + childNode.getBound() + ">" + optimalNode.getValue());
                     data.enqueue(childNode);
                 }
