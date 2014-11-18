@@ -13,9 +13,9 @@ import java.util.List;
 
 public class BackPack {
 
-    private int maxWeight;  // maksimaalne koti kaal
-    private List<Item> items;// List asjadest, mis on kotis
-    private Node bestNode; //Node, mis on parim
+    private int maxWeight;      // maksimaalne koti kaal
+    private List<Item> items;   // List asjadest, mis on kotis
+    private Node bestNode;      //Node, mis on parim
 
 
     public int getMaxWeight() {
@@ -84,7 +84,7 @@ public class BackPack {
         }
     }
 
-    public Node knapSackBestFirst(List<Item> items, int maxWeight) { // best first algoritm, sisu sama, mis depth first
+    public Node BackPackBestFirst(List<Item> items, int maxWeight) { // best first algoritm, sisu sama, mis depth first
         this.maxWeight = maxWeight;
         this.items = items;
         calculateBest(new PriorityQueue(this));
@@ -108,7 +108,9 @@ public class BackPack {
 
                 childNode = new Node(this, rootNode, true);     //lisame childnode, millel on järgmine item
 
+
                 // juhul, kui childnodel on koguväärtus suurim, siis määrame ta parimaks
+                //samas on sama voi vaiksem kui maxweigth
                 if (childNode.getWeight() <= maxWeight && childNode.getValue() > bestNode.getValue()) {
                     bestNode = childNode;
                 }
